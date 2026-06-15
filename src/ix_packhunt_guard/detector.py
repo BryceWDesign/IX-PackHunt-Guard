@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from itertools import pairwise
 
 from ix_packhunt_guard.classifier import RuleBasedIntentClassifier
 from ix_packhunt_guard.graph import CapabilityAssemblyGraph
@@ -38,7 +39,7 @@ class DetectorThresholds:
             self.block,
             self.lock_session,
         )
-        if any(left > right for left, right in zip(ordered, ordered[1:])):
+        if any(left > right for left, right in pairwise(ordered)):
             raise ValueError("thresholds must be non-decreasing")
         if self.window_minutes <= 0:
             raise ValueError("window_minutes must be positive")
